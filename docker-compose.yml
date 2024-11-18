@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./app
+    container_name: hono_api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx_proxy
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
